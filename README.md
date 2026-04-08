@@ -1,0 +1,1 @@
+# shift-stock-app
