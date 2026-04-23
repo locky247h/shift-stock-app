@@ -10,4 +10,39 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+model User {
+  id          String      @id @default(uuid())
+  name        String
+  role        Role
+  lineId      String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+  shifts  Shift[]
+}
+
+model Shift {
+  id          String      @id @default(uuid())
+  userId      String
+  user    User    @relation(fields: [userId], references: [id])
+  startTime   DateTime
+  endTime     DateTime
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+  status      ShiftStatus
+}
+
+enum ShiftStatus {
+  DRAFT      // 下書き
+  CONFIRMED  // 確定
+  PUBLISHED  // 公開済み
 }
