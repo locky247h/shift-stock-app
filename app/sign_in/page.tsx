@@ -3,6 +3,9 @@
 import { supabase } from '@/app/_libs/supabase'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { Input } from '@/app/_components/Input'
+import { Label } from '@/app/_components/Label'
+
 
 export default function Page() {
   const [email, setEmail] = useState('')
@@ -23,7 +26,7 @@ export default function Page() {
     if (error) {
       alert('ログインに失敗しました')
     } else {
-      router.replace('/admin/posts')
+      router.replace('/admin/shifts')
     }
     setIsLoading(false)
   }
@@ -32,39 +35,30 @@ export default function Page() {
     <div className="flex justify-center pt-60">
       <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-100">
         <div>
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            メールアドレス
-          </label>
-          <input
+          <Label htmlFor="email">メールアドレス</Label>
+          <Input
             type="email"
-            name="email"
             id="email"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            name="email"
             placeholder="name@company.com"
             required
             onChange={(e) => setEmail(e.target.value)}
+            value={email}
             disabled={isLoading}
           />
         </div>
         <div>
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            パスワード
-          </label>
-          <input
+          <Label htmlFor="password">パスワード</Label>
+          <Input
             type="password"
-            name="password"
             id="password"
+            name="password"
             placeholder="••••••••"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             required
             onChange={(e) => setPassword(e.target.value)}
+            value={password}
             disabled={isLoading}
+            
           />
         </div>
 

@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { supabase } from '@/app/_libs/supabase'
+import { Input } from '@/app/_components/Input'
+import { Label } from '@/app/_components/Label'
 
 export default function Page() {
   const [email, setEmail] = useState('')
