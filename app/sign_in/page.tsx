@@ -1,50 +1,45 @@
 'use client'
 
 import { supabase } from '@/app/_libs/supabase'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import { Input } from '@/app/_components/Input'
 import { Label } from '@/app/_components/Label'
+import { useForm} from 'react-hook-form'
 
+type FormData = {
+  email: string
+  password: string
+}
 
 export default function Page() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  // React Hook Formのセットアップ
+  const { register, handleSubmit, formState: { isSubmitting } } = useForm<FormData>()
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    setIsLoading(true)
-
+  // パスワードの状態管理
+  const onSubmit = async (data: FormData) => {
     const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: data.email,
+      password: data.password,
     })
 
     if (error) {
       alert('ログインに失敗しました')
     } else {
-      router.replace('/admin/shifts')
+      alert('ログインに成功しました')
     }
-    setIsLoading(false)
   }
 
   return (
     <div className="flex justify-center pt-60">
-      <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-100">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full max-w-100">
         <div>
           <Label htmlFor="email">メールアドレス</Label>
           <Input
             type="email"
             id="email"
-            name="email"
             placeholder="name@company.com"
             required
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            disabled={isLoading}
+            disabled={isSubmitting}
+            {...register('email')}
           />
         </div>
         <div>
@@ -52,13 +47,10 @@ export default function Page() {
           <Input
             type="password"
             id="password"
-            name="password"
             placeholder="••••••••"
             required
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            disabled={isLoading}
-            
+            disabled={isSubmitting}
+            {...register('password')}
           />
         </div>
 
@@ -66,7 +58,7 @@ export default function Page() {
           <button
             type="submit"
             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            disabled={isLoading}
+            disabled={isSubmitting}
           >
             ログイン
           </button>
